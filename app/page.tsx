@@ -1,141 +1,79 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Calendar, Clock, Users, TrendingUp, Plus } from "lucide-react"
+import Link from "next/link"
+import { Calendar, Users, QrCode, CalendarDays, Settings, BarChart3 } from "lucide-react"
+import { Card, CardContent } from "@/components/ui/card"
 
-export default function Dashboard() {
-  const upcomingAppointments = [
+export default function HomePage() {
+  const navigationTiles = [
     {
-      id: 1,
-      client: "Sarah Johnson",
-      service: "Deep Tissue Massage",
-      time: "2:00 PM",
-      date: "Today",
-      duration: "60 min",
-    },
-    {
-      id: 2,
-      client: "Mike Chen",
-      service: "Sports Massage",
-      time: "4:30 PM",
-      date: "Today",
-      duration: "90 min",
-    },
-    {
-      id: 3,
-      client: "Emma Wilson",
-      service: "Relaxation Massage",
-      time: "10:00 AM",
-      date: "Tomorrow",
-      duration: "60 min",
-    },
-  ]
-
-  const stats = [
-    {
-      title: "Active Clients",
-      value: "24",
-      icon: Users,
-      change: "+2 this week",
-    },
-    {
-      title: "Hours Booked",
-      value: "32.5",
-      icon: Clock,
-      change: "This week",
-    },
-    {
-      title: "Next Available",
-      value: "Thu 3PM",
+      title: "Calendar",
+      description: "View and manage appointments",
       icon: Calendar,
-      change: "2 days away",
+      href: "/calendar",
+      color: "bg-blue-500",
     },
     {
-      title: "Revenue",
-      value: "$2,840",
-      icon: TrendingUp,
-      change: "+12% vs last week",
+      title: "Clients",
+      description: "Manage client information",
+      icon: Users,
+      href: "/clients",
+      color: "bg-green-500",
+    },
+    {
+      title: "QR Intake",
+      description: "Client intake form",
+      icon: QrCode,
+      href: "/intake",
+      color: "bg-purple-500",
+    },
+    {
+      title: "Yearly Planning",
+      description: "Auto-schedule sessions",
+      icon: CalendarDays,
+      href: "/planning",
+      color: "bg-orange-500",
+    },
+    {
+      title: "Analytics",
+      description: "View business insights",
+      icon: BarChart3,
+      href: "/analytics",
+      color: "bg-pink-500",
+    },
+    {
+      title: "Settings",
+      description: "App preferences",
+      icon: Settings,
+      href: "/settings",
+      color: "bg-gray-500",
     },
   ]
 
   return (
-    <div className="p-4 space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-        <p className="text-muted-foreground">Welcome back! Here's your overview for today.</p>
-      </div>
+    <div className="min-h-screen bg-gray-50 p-4">
+      <div className="max-w-4xl mx-auto">
+        <header className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">MayTimeFlow</h1>
+          <p className="text-gray-600">Appointment Management for Service Providers</p>
+        </header>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((stat) => (
-          <Card key={stat.title}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-              <stat.icon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
-              <p className="text-xs text-muted-foreground">{stat.change}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {/* Upcoming Appointments */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Upcoming Appointments</CardTitle>
-              <CardDescription>Your schedule for the next 2 days</CardDescription>
-            </div>
-            <Button size="sm">
-              <Plus className="h-4 w-4 mr-2" />
-              Add Appointment
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {upcomingAppointments.map((appointment) => (
-              <div key={appointment.id} className="flex items-center justify-between p-4 border rounded-lg">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-medium">{appointment.client}</h3>
-                    <Badge variant="secondary">{appointment.duration}</Badge>
-                  </div>
-                  <p className="text-sm text-muted-foreground">{appointment.service}</p>
-                </div>
-                <div className="text-right">
-                  <p className="font-medium">{appointment.time}</p>
-                  <p className="text-sm text-muted-foreground">{appointment.date}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="cursor-pointer hover:shadow-md transition-shadow">
-          <CardHeader>
-            <CardTitle className="text-lg">Smart Scheduler</CardTitle>
-            <CardDescription>Get AI-powered scheduling suggestions</CardDescription>
-          </CardHeader>
-        </Card>
-        <Card className="cursor-pointer hover:shadow-md transition-shadow">
-          <CardHeader>
-            <CardTitle className="text-lg">Client Check-in</CardTitle>
-            <CardDescription>Generate QR codes for new clients</CardDescription>
-          </CardHeader>
-        </Card>
-        <Card className="cursor-pointer hover:shadow-md transition-shadow">
-          <CardHeader>
-            <CardTitle className="text-lg">Weekly Report</CardTitle>
-            <CardDescription>View your performance analytics</CardDescription>
-          </CardHeader>
-        </Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {navigationTiles.map((tile) => {
+            const Icon = tile.icon
+            return (
+              <Link key={tile.title} href={tile.href}>
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                  <CardContent className="p-6">
+                    <div className={`w-12 h-12 ${tile.color} rounded-lg flex items-center justify-center mb-4`}>
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">{tile.title}</h3>
+                    <p className="text-gray-600">{tile.description}</p>
+                  </CardContent>
+                </Card>
+              </Link>
+            )
+          })}
+        </div>
       </div>
     </div>
   )
