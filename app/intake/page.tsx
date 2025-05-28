@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import { useRouter } from "next/navigation"
 
 import { useState, useEffect } from "react"
 import { QRCodeSVG } from "qrcode.react"
@@ -16,6 +17,7 @@ import type { Client } from "@/types"
 export default function IntakePage() {
   const [showForm, setShowForm] = useState(false)
   const [qrUrl, setQrUrl] = useState("")
+  const router = useRouter()
 
   useEffect(() => {
     // In a real app, this would be your actual domain
@@ -48,11 +50,21 @@ export default function IntakePage() {
       createdAt: new Date(),
     }
 
+    // Save to client database
     storage.clients.add(clientData)
-    alert("Thank you! Your information has been submitted successfully.")
+
+    // Show success message with client info
+    alert(
+      `Thank you ${clientData.name}! Your information has been submitted successfully and you've been added to our client database. You can now be easily selected when booking appointments.`,
+    )
 
     // Reset form
     e.currentTarget.reset()
+
+    // Redirect to show the client was added
+    if (confirm("Would you like to view the client database to see your entry?")) {
+      router.push("/clients")
+    }
   }
 
   if (showForm) {
@@ -61,6 +73,16 @@ export default function IntakePage() {
         <div className="max-w-2xl mx-auto">
           <Card>
             <CardHeader>
+              <div className="flex items-center gap-2 mb-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => router.push("/")}
+                  className="bg-sage-400 hover:bg-sage-500 text-white border-none rounded-full"
+                >
+                  ← Back to Home
+                </Button>
+              </div>
               <CardTitle className="text-2xl text-center">Client Intake Form</CardTitle>
               <p className="text-center text-gray-600">Please fill out your information and preferences</p>
             </CardHeader>
@@ -69,24 +91,24 @@ export default function IntakePage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="name">Full Name *</Label>
-                    <Input id="name" name="name" required />
+                    <Input id="name" name="name" required className="rounded-full" />
                   </div>
                   <div>
                     <Label htmlFor="email">Email Address *</Label>
-                    <Input id="email" name="email" type="email" required />
+                    <Input id="email" name="email" type="email" required className="rounded-full" />
                   </div>
                 </div>
 
                 <div>
                   <Label htmlFor="phone">Phone Number *</Label>
-                  <Input id="phone" name="phone" required />
+                  <Input id="phone" name="phone" required className="rounded-full" />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="frequency">How often would you like appointments?</Label>
                     <Select name="frequency" defaultValue="biweekly">
-                      <SelectTrigger>
+                      <SelectTrigger className="rounded-full">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -101,7 +123,7 @@ export default function IntakePage() {
                   <div>
                     <Label htmlFor="preferredDay">Preferred Day of Week</Label>
                     <Select name="preferredDay" defaultValue="friday">
-                      <SelectTrigger>
+                      <SelectTrigger className="rounded-full">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -119,7 +141,12 @@ export default function IntakePage() {
 
                 <div>
                   <Label htmlFor="preferredTime">Preferred Time</Label>
-                  <Input id="preferredTime" name="preferredTime" type="time" />
+                  <Input
+                    id="preferredTime"
+                    name="preferredTime"
+                    type="time"
+                    className="rounded-full [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:brightness-0 [&::-webkit-calendar-picker-indicator]:saturate-100 [&::-webkit-calendar-picker-indicator]:invert-[0.5] [&::-webkit-calendar-picker-indicator]:sepia-[1] [&::-webkit-calendar-picker-indicator]:saturate-[5] [&::-webkit-calendar-picker-indicator]:hue-rotate-[315deg] [&::-webkit-calendar-picker-indicator]:brightness-[0.9]"
+                  />
                 </div>
 
                 <div>
@@ -129,10 +156,11 @@ export default function IntakePage() {
                     name="notes"
                     placeholder="Any specific requests, health considerations, or scheduling preferences..."
                     rows={4}
+                    className="rounded-lg"
                   />
                 </div>
 
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full bg-sage-500 hover:bg-sage-600 text-white rounded-full">
                   Submit Information
                 </Button>
               </form>
@@ -148,6 +176,16 @@ export default function IntakePage() {
       <div className="max-w-4xl mx-auto">
         <Card>
           <CardHeader>
+            <div className="flex items-center gap-2 mb-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => router.push("/")}
+                className="bg-sage-400 hover:bg-sage-500 text-white border-none rounded-full"
+              >
+                ← Back to Home
+              </Button>
+            </div>
             <CardTitle className="text-2xl text-center">QR Code Client Intake</CardTitle>
             <p className="text-center text-gray-600">
               Share this QR code with new clients to collect their information
@@ -166,7 +204,7 @@ export default function IntakePage() {
                 <Card>
                   <CardContent className="p-4">
                     <div className="text-center">
-                      <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center mx-auto mb-2">
+                      <div className="w-8 h-8 bg-sage-500 text-white rounded-full flex items-center justify-center mx-auto mb-2">
                         1
                       </div>
                       <h4 className="font-semibold mb-2">Share QR Code</h4>
@@ -180,7 +218,7 @@ export default function IntakePage() {
                 <Card>
                   <CardContent className="p-4">
                     <div className="text-center">
-                      <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center mx-auto mb-2">
+                      <div className="w-8 h-8 bg-sage-500 text-white rounded-full flex items-center justify-center mx-auto mb-2">
                         2
                       </div>
                       <h4 className="font-semibold mb-2">Client Scans</h4>
@@ -194,7 +232,7 @@ export default function IntakePage() {
                 <Card>
                   <CardContent className="p-4">
                     <div className="text-center">
-                      <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center mx-auto mb-2">
+                      <div className="w-8 h-8 bg-sage-500 text-white rounded-full flex items-center justify-center mx-auto mb-2">
                         3
                       </div>
                       <h4 className="font-semibold mb-2">Auto-Added</h4>
@@ -208,7 +246,11 @@ export default function IntakePage() {
             </div>
 
             <div className="pt-4">
-              <Button onClick={() => setShowForm(true)} variant="outline">
+              <Button
+                onClick={() => setShowForm(true)}
+                variant="outline"
+                className="bg-pink-400 hover:bg-pink-500 text-white border-none rounded-full"
+              >
                 Preview Intake Form
               </Button>
             </div>
